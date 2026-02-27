@@ -1,0 +1,15 @@
+# Machine Learning & Computer Vision
+tensorflow
+scikit-learn==1.6.1
+mediapipe
+opencv-python
+
+# Data Processing & Math
+numpy==1.26.4
+scipy==1.15.2
+
+# Utilities & Visualization
+joblib==1.5.0
+threadpoolctl==3.6.0
+matplotlib
+jupyter
