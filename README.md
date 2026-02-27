@@ -36,7 +36,55 @@ While not utilizing traditional LLM agents, TransLingua relies on a **Dual-Infer
 
 ## 🏗️ System Architecture
 
+```mermaid
+flowchart LR
+    subgraph Input [Data Capture]
+        A([Webcam Video Stream])
+    end
 
+    subgraph Preprocessing [Feature Extraction & Processing]
+        B[MediaPipe Framework]
+        C[Landmark Extraction: Hands & Pose]
+        D[NumPy Normalization]
+        B --> C
+        C --> D
+    end
+
+    subgraph Classification [Scikit-Learn Dual-Inference Engine]
+        E{Sequence Type?}
+        F[Static Classifier: Isolated Characters]
+        G[Dynamic Classifier: Continuous Words]
+        E -->|Single Frame| F
+        E -->|Temporal Window| G
+    end
+
+    subgraph Output [User Interface]
+        H[Text Translation]
+        I([Real-Time Display: FPS & Confidence])
+        H --> I
+    end
+
+    A --> B
+    D --> E
+    F --> H
+    G --> H
+
+    %% Clean, cohesive, and highly readable styling
+    classDef inputNode fill:#F8FAFC,stroke:#64748B,stroke-width:2px,color:#0F172A;
+    classDef processNode fill:#EFF6FF,stroke:#3B82F6,stroke-width:2px,color:#1E3A8A;
+    classDef mlNode fill:#EEF2FF,stroke:#4F46E5,stroke-width:2px,color:#312E81;
+    classDef outputNode fill:#F0FDF4,stroke:#16A34A,stroke-width:2px,color:#14532D;
+
+    class A inputNode;
+    class B processNode;
+    class C processNode;
+    class D processNode;
+    class E mlNode;
+    class F mlNode;
+    class G mlNode;
+    class H outputNode;
+    class I outputNode;
+```
 1.  **Input Layer:** Standard web camera captures video frames.
 2.  **Feature Extraction Layer (MediaPipe):** Extracts specific X, Y, Z coordinates for hand and pose landmarks.
 3.  **Preprocessing Layer (NumPy):** Normalizes landmarks and converts them into flattened `.npy` arrays.
@@ -98,3 +146,26 @@ TransLingua/
 ├── requirements.txt             # Project dependencies
 └── README.md                    # Project documentation
 ```
+## 📊 Data Collection & Dataset Engineering
+
+A robust, custom-built dataset is the core of TransLingua's high accuracy. To ensure data integrity and optimal training performance, the project utilizes a rigorous automated data collection script to capture, process, and store nearly **30,000 localized landmark arrays**.
+
+### 1. Spatial Feature Extraction
+Instead of storing heavy, raw image files (which introduce noise and lighting bias), the pipeline captures specific **Hand and Pose landmarks** via a standard webcam feed using MediaPipe. These spatial coordinates are instantly extracted, normalized, and flattened into lightweight 1D NumPy arrays (`.npy`), ensuring rapid I/O operations and highly efficient model training.
+
+### 2. Static Data Pipeline (Isolated Characters)
+For static manual gestures (e.g., individual letters of the alphabet):
+* **Structure:** Segregated into individual subfolders for each distinct character.
+* **Volume:** Approximately **300 unique `.npy` samples** collected per character.
+* **Capture Method:** Single-frame spatial coordinate extraction designed to capture the exact finger configuration and hand positioning at a specific fraction of a second.
+
+### 3. Dynamic Data Pipeline (Continuous Words)
+For dynamic, multi-motion gestures (e.g., full words or phrases):
+* **Structure:** 10 dedicated subfolders, representing 10 distinct vocabulary words.
+* **Volume:** **15 to 40 complete sequence samples** per word.
+* **Capture Method:** Temporal windowing. Because meaning is derived from motion, each sample captures a continuous sequence of frames over a set timeframe to track the exact spatial trajectory of the gesture.
+
+### 4. Data Quality Assurance & Preprocessing
+To ensure high-fidelity model training and prevent overfitting:
+* **Relative Normalization:** All spatial coordinates are normalized, ensuring the models remain invariant to the user's distance from the camera or varying body proportions.
+* **Consistency:** The automated collection script verifies the matrix shape and integrity of every `.npy` file, guaranteeing uniform data dimensions before the arrays are fed into the Scikit-Learn training pipelines.
