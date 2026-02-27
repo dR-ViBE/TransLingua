@@ -71,9 +71,10 @@ Ensure you have Python 3.8+ and `pip` installed on your machine.
    ```bash
    python -m venv mp_env
    source mp_env/bin/activate  # On Windows use: mp_env\Scripts\activate
+   
 3. **Install Dependencies:**
    ```bash
-   pip install scikit-learn numpy scipy joblib threadpoolctl opencv-python mediapipe jupyter
+   pip install -r requirements.txt
 4. **Launch the Pipeline:**
    ```bash
    jupyter notebook ganeshpr_Project.ipynb
