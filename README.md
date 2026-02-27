@@ -67,3 +67,33 @@ Ensure you have Python 3.8+ and `pip` installed on your machine.
    ```bash
    git clone [https://github.com/dR-ViBE/TransLingua.git](https://github.com/dR-ViBE/TransLingua.git)
    cd TransLingua
+2. **Create a Virtual Environment (Recommended):**
+   ```bash
+   python -m venv mp_env
+   source mp_env/bin/activate  # On Windows use: mp_env\Scripts\activate
+3. **Install Dependencies:**
+   ```bash
+   pip install scikit-learn numpy scipy joblib threadpoolctl opencv-python mediapipe jupyter
+4. **Launch the Pipeline:**
+   ```bash
+   jupyter notebook ganeshpr_Project.ipynb
+## 📂 Project Structure:
+```text
+TransLingua/
+│
+├── static_data/                 # Spatial data for isolated characters
+│   ├── A/                       # ~300 .npy sample files per character
+│   ├── B/
+│   ├── C/
+│   └── ...                      # (Remaining alphabet)
+│
+├── dynamic_data/                # Temporal sequence data for continuous words
+│   ├── hello/                   # 15-40 sequence samples per word
+│   ├── thank_you/
+│   ├── please/
+│   └── ...                      # (10 dynamic words total)
+│
+├── ganeshpr_Project.ipynb       # Main execution and inference pipeline
+├── requirements.txt             # Project dependencies
+└── README.md                    # Project documentation
+```
